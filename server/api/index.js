@@ -6,8 +6,9 @@ for (var i = 0; i < apis.length; i++) {
   var filePath = currentPath + '/' + apis[i];
   if (fs.statSync(filePath).isDirectory()) {
     dir.push(apis[i]);
-  };
+  }
 }
+console.log('Dir is :', dir);
 module.exports = function(app){
   for (var i = 0; i < dir.length; i++) {
     var api = dir[i];
