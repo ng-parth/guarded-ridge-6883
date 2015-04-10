@@ -8,10 +8,11 @@ app.use(express.static(__dirname + '/../'));
 app.use(require('body-parser').json());
 require('./api')(app);
 var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/meanDemo-dev';
+var port = process.env.PORT || 3000;
 
 mongoose.connect(mongoUrl);
 
-var server = app.listen(3000, function () {
+var server = app.listen(port , function () {
   console.log('App listening at http://localhost:%s', server.address().port);
 });
 
