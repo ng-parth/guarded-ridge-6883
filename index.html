@@ -2,38 +2,37 @@
 <html ng-app="bookMarker">
     <head lang="en">
         <meta charset="UTF-8">
-        <title>{{1+1}}</title>
+        <title>All in 1</title>
     </head>
-    <body>
-    <!--<span class="alert-info">Ui-View loads here!</span>-->
-    <div>
-        <div>
-            <ul class="nav nav-pills" ng-init="htmlScope = '<h1>Hello World!</h1>'">
-                <li role="presentation" ><a href="#">Home</a></li>
-                <li role="presentation"><a href="#">Profile</a></li>
-                <li role="presentation"><a href="#">Messages</a></li>
-                <li role="presentation"><a href="#" ng-bind="htmlScope"></a></li>
+    <body class="primary-color-500">
+    <div class="main-container">
+        <div class="header">
+            <ul class="nav nav-pills" >
+                <li role="presentation" ><a href="#">Bookmarks</a></li>
+                <li role="presentation"><a href="#">Notes</a></li>
+                <li role="presentation"><a href="#">Todos</a></li>
+                <li role="presentation"><a href="#">Password Bank</a></li>
             </ul>
         </div>
-<div class="col-lg-12">
-    <div class="col-lg-2" style="color: #b2dba1">
-        <i class="glyphicon glyphicon-arrow-down"></i> Menu Here! <i class="glyphicon glyphicon-arrow-down"></i>
-        <div ui-view="viewMenu"></div>
-    </div>
-    <div class="col-lg-10">
-        <div ui-view="viewBody"> </div>
-    </div>
-</div>
-
-        <div class="col-lg-12" style="background-color: #b2dba1">
-            <b>Problem Statement</b>
-            <p>A rice seller has n kg of rice. There is price list for n Kg and less than n Kg of rice. For example let say a seller has 8 Kg of rice and price list is as follows:<br><br></p><table style="border-collapse: collapse; border: 1px solid rgb(204, 204, 204);" border="1"><tbody><tr><td style="border: 1px solid rgb(204, 204, 204);">Weight(Kg)</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">1</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">2</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">3</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">4</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">5</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">6</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">7</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">8</td></tr><tr><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">price(Rs.)</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">1</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">5</td><td style="border: 1px solid rgb(204, 204, 204);">8</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">9</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">10</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">17</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">17</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">20</td></tr></tbody></table><br><br>Now the question is to how he should sell the n Kg of rice so that he got the maximum benefit. You have to answer the <b>maximum benefit</b>.<br><br>For above example if he sells the 8 Kg as whole he would earn Rs. 20 if he sells 1 Kg to 8 different people he would earn 8*1=Rs. 8. But if he sells it as 2 Kg and 6 Kg he would earn 5+17=22 which is the maximum he can get in the above example.<br><br>So you are given n Kg and price list of 1 to n Kg and you have to answer what is the maximum benefit the seller can get by any partition of n Kg.<p></p>
-            <br><br>
-            <b>Input Specifications</b>  <p>1) n Kg<br>2) Array of length n containing the price list from 1 to n kg.</p>
-
-            <b>Output Specifications</b> <p>maximum benefit which can be obtained by any partition of n Kg rice.</p>
-            <br>
+    <div class="col-lg-12">
+        <!--<div class="col-lg-2" style="color: #b2dba1">-->
+            <!--<i class="glyphicon glyphicon-arrow-down"></i> Menu Here! <i class="glyphicon glyphicon-arrow-down"></i>-->
+            <!--<div ui-view="viewMenu"></div>-->
+        <!--</div>-->
+        <div class="col-lg-10 col-lg-offset-1" >
+            <div ui-view="viewBody"> </div>
         </div>
+    </div>
+
+        <!--<div class="col-lg-12" style="background-color: #b2dba1">-->
+            <!--<b>Problem Statement</b>-->
+            <!--<p>A rice seller has n kg of rice. There is price list for n Kg and less than n Kg of rice. For example let say a seller has 8 Kg of rice and price list is as follows:<br><br></p><table style="border-collapse: collapse; border: 1px solid rgb(204, 204, 204);" border="1"><tbody><tr><td style="border: 1px solid rgb(204, 204, 204);">Weight(Kg)</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">1</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">2</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">3</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">4</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">5</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">6</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">7</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">8</td></tr><tr><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">price(Rs.)</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">1</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">5</td><td style="border: 1px solid rgb(204, 204, 204);">8</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">9</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">10</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">17</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">17</td><td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">20</td></tr></tbody></table><br><br>Now the question is to how he should sell the n Kg of rice so that he got the maximum benefit. You have to answer the <b>maximum benefit</b>.<br><br>For above example if he sells the 8 Kg as whole he would earn Rs. 20 if he sells 1 Kg to 8 different people he would earn 8*1=Rs. 8. But if he sells it as 2 Kg and 6 Kg he would earn 5+17=22 which is the maximum he can get in the above example.<br><br>So you are given n Kg and price list of 1 to n Kg and you have to answer what is the maximum benefit the seller can get by any partition of n Kg.<p></p>-->
+            <!--<br><br>-->
+            <!--<b>Input Specifications</b>  <p>1) n Kg<br>2) Array of length n containing the price list from 1 to n kg.</p>-->
+
+            <!--<b>Output Specifications</b> <p>maximum benefit which can be obtained by any partition of n Kg rice.</p>-->
+            <!--<br>-->
+        <!--</div>-->
 
 
     </div>
@@ -47,6 +46,7 @@
 
     <!--STYLES-->
     <link rel="stylesheet" href="lib/bootstrap3/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="client/css/cyanTheme.css" />
 
     <!--APP-->
     <script src="client/app/app.js"></script>
