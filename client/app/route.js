@@ -8,6 +8,7 @@ angular.module('bookMarker')
     $stateProvider
       .state('bookmark', {
         url: '/bookmark',
+        abstract: true,
         views: {
           viewMenu: {template: 'Can navigate to <br/> List, Edit'},
           viewBody: {template: '<ui-view></ui-view>'}
@@ -15,38 +16,16 @@ angular.module('bookMarker')
       })
       .state('bookmark.list',{
         url: '/list',
-        //views: {
-        //  viewMenu: {template: 'Can navigate to <br/> Add, Edit'}
-        //  //viewBody: {
-        //  //  templateUrl: 'client/bookmark/view/list.html',
-        //  //  controller: 'listCtrl as listCtrl'
-        //  //}
-        //},
-
         templateUrl: 'client/bookmark/view/list.html',
         controller: 'listCtrl as listCtrl'
       })
       .state('bookmark.add',{
         url: '/add',
-        //views: {
-        //  viewMenu: {template: 'Can navigate to <br/> List'},
-        //  viewBody: {
-        //    templateUrl: 'client/bookmark/view/add.html',
-        //    controller: 'upsertCtrl as addCtrl'
-        //  }
-        //}
         templateUrl: 'client/bookmark/view/add.html',
         controller: 'upsertCtrl as addCtrl'
       })
       .state('bookmark.edit',{
         url: '/edit/:bookMarkId',
-        //views: {
-        //  viewMenu: {template: 'Can navigate to <br/> Add, List'},
-        //  viewBody: {
-        //    templateUrl: 'client/bookmark/view/edit.html',
-        //    controller: 'upsertCtrl as editCtrl'
-        //  }
-        //}
         templateUrl: 'client/bookmark/view/edit.html',
         controller: 'upsertCtrl as editCtrl'
       })
