@@ -1,0 +1,29 @@
+<div >
+    <table class="table table-bordered table-responsive">
+        <thead>
+        <tr>
+            <td colspan="6">
+                <a ui-sref="bookmark.add" class="btn btn-success pull-right"><i class="glyphicon glyphicon-plus"></i>  Add</a>
+            </td>
+        </tr>
+            <tr>
+                <td>No</td>
+                <td>Title</td>
+                <td>Link</td>
+                <td>Tags</td>
+                <td>Edit</td>
+                <td>Remove</td>
+            </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="link in ::listCtrl.links">
+            <td ng-bind="$index + 1"></td>
+            <td ng-bind="link.title"></td>
+            <td ><a href="{{link.link}}" target="_blank" ng-bind="link.link"></a> </td>
+            <td ng-bind="link.tags"></td>
+            <td ><a ui-sref="bookmark.edit({bookMarkId: link._id})"> <i class="glyphicon glyphicon-pencil" ></i> </a> </td>
+            <td ><i class="glyphicon glyphicon-remove-circle" ng-click="listCtrl.deleteBookmark(link._id)" ></i> </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
