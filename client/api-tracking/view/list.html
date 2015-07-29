@@ -1,0 +1,24 @@
+<div>
+    <table class="table table-bordered table-responsive">
+        <thead>
+            <tr>
+                <td>No</td>
+                <td>Name</td>
+                <td>Api</td>
+                <td>Src</td>
+                <td>Time</td>
+                <td>ApiInfo</td>
+            </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="api in ::apiListCtrl.apis">
+            <td ng-bind="$index + 1"></td>
+            <td ng-bind="api.name"></td>
+            <td ng-bind="api.api"></td>
+            <td ng-bind="api.src"></td>
+            <td ng-bind="api.createdTs | date:'dd-MM-yy @ hh:mm:ss a'"> </td>
+            <td ng-bind="api.apiInfo | json"> </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -29,6 +29,15 @@ angular.module('bookMarker')
         templateUrl: 'client/bookmark/view/edit.html',
         controller: 'upsertCtrl as editCtrl'
       })
+        .state('apiTrack', {
+          url: '/api-track',
+          views: {
+            viewBody: {
+              templateUrl: 'client/api-tracking/view/list.html',
+              controller: 'apiListCtrl as apiListCtrl'
+            }
+          }
+        })
   });
 
 
