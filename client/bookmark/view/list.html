@@ -1,11 +1,11 @@
 <div >
     <table class="table table-bordered table-responsive">
         <thead>
-        <tr>
-            <td colspan="6">
-                <a ui-sref="bookmark.add" class="btn btn-success pull-right"><i class="glyphicon glyphicon-plus"></i>  Add</a>
-            </td>
-        </tr>
+            <tr>
+                <td colspan="6">
+                    <a ui-sref="bookmark.add" class="btn btn-success pull-right"><i class="glyphicon glyphicon-plus"></i>  Add</a>
+                </td>
+            </tr>
             <tr>
                 <td>No</td>
                 <td>Title</td>
@@ -14,9 +14,17 @@
                 <td>Edit</td>
                 <td>Remove</td>
             </tr>
+            <tr>
+                <td><i class="glyphicon glyphicon-filter"></i> </td>
+                <td><input type="text" class="form-control" ng-model="listCtrl.filterList.title" /></td>
+                <td><input type="text" class="form-control" ng-model="listCtrl.filterList.link" /></td>
+                <td><input type="text" class="form-control" ng-model="listCtrl.filterList.tags" /></td>
+                <td><i class="glyphicon glyphicon-pencil" ></i></td>
+                <td><i class="glyphicon glyphicon-remove-circle"></i></td>
+            </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="link in ::listCtrl.links">
+        <tr ng-repeat="link in listCtrl.links | filter : listCtrl.filterList">
             <td ng-bind="$index + 1"></td>
             <td ng-bind="link.title"></td>
             <td ><a href="{{link.link}}" target="_blank" ng-bind="link.link"></a> </td>
