@@ -1,4 +1,4 @@
-[
+{"data": [
     {
       "id": 1,
       "name": "Manchester United",
@@ -112,3 +112,4 @@
       "country": "USA"
     }
   ]
+}
