@@ -1,1 +1,1 @@
-web: node server/app.js
+web: npm install; node server/app.js
