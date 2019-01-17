@@ -6,25 +6,26 @@ var app = express();
 var mongoose = require('mongoose');
 var allowCrossDomain = function(req, res, next) {
     console.log('reqUrl: ', req.url);
-    if (req.url === '/') {
+    if (req.url === '/' || req.url === '/favicon.ico' ) {
         next();
+    } else {
+        var origin = req.header('origin');
+        console.log('origin', origin);
+        if ( origin && (origin.indexOf('localhost') > -1
+            || origin.indexOf('ng-parth.xyz') > -1
+            || origin.indexOf('ng-parth') > -1
+            || origin.indexOf('heroku') > -1
+            || origin.indexOf('hb-demo') > -1
+            || origin.indexOf('hb') > -1
+            || origin.indexOf('github') > -1)) {
+            res.header('Access-Control-Allow-Origin', origin);
+            res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+            res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+            next();
+        } else {
+            res.sendStatus(401);
+        }
     }
-  var origin = req.header('origin');
-  console.log('origin', origin);
-  if ( origin && (origin.indexOf('localhost') > -1
-      || origin.indexOf('ng-parth.xyz') > -1
-      || origin.indexOf('ng-parth') > -1
-      || origin.indexOf('heroku') > -1
-      || origin.indexOf('hb-demo') > -1
-      || origin.indexOf('hb') > -1
-      || origin.indexOf('github') > -1)) {
-      res.header('Access-Control-Allow-Origin', origin);
-      res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-      next();
-  } else {
-    res.sendStatus(401);
-  }
 };
 app.use(allowCrossDomain);
 app.use(express.static(__dirname + '/../'));
