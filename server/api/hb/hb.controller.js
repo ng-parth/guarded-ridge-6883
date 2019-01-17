@@ -14,8 +14,8 @@ function ProductCard (type, index) {
     this.size = '500g';
     this.badge = Math.random() > 0.75 ?'Bestseller' : '';
     this.badgeType = 'info';
-    this.lowQtyAlert = this.maxQty < 2 ? 'Only a few left' : '';
     this.maxQty = Math.floor(Math.random() * 10) || 1;
+    this.lowQtyAlert = this.maxQty < 4 ? 'Only a few left' : '';
     this.qtyInCart = Math.random() > 0.7 ? Math.floor(Math.random() * 10) : 0;
 }
 
