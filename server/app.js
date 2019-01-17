@@ -5,6 +5,10 @@ var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
 var allowCrossDomain = function(req, res, next) {
+    console.log('reqUrl: ', req.url);
+    if (req.url === '/') {
+        next();
+    }
   var origin = req.header('origin');
   console.log('origin', origin);
   if ( origin && (origin.indexOf('localhost') > -1
