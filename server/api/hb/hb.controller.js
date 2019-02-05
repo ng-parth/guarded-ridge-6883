@@ -19,16 +19,20 @@ function ProductCard (type, index) {
     this.qtyInCart = Math.random() > 0.7 ? Math.floor(Math.random() * 10) : 0;
 }
 
+var getProducts = function(type, nos) {
+    const productsList = [];
+    for (let i = 0; i < nos; i++) {
+        productsList.push(new ProductCard(type, i + 1))
+    }
+    return productsList;
+};
+
 // /api/page/:pageName?key=value
 // getProducts
 exports.get = function (req, res) {
-    var getProducts = function(type, nos) {
-        const productsList = [];
-        for (let i = 0; i < nos; i++) {
-            productsList.push(new ProductCard(type, i + 1))
-        }
-        return productsList;
-    };
+
+    // Section types:
+    // -promo -list -shopBy
     var homepageResponse = {
         // url: 'GET /api/page/{pageName}?key=value',
         pageName: 'homepage',
@@ -47,7 +51,9 @@ exports.get = function (req, res) {
                 title: 'Trending this week',
                 seeMoreTitle: 'See All trending (27)',
                 seeMoreActionUrl: '/special/cold-cuts',
-                products: getProducts('Trending', 4),
+                apiUrl: '/api/hb/products/Trending',
+                // products: getProducts('Trending', 4),
+                products: [],
             },
             {
                 sectionType: 'list',
@@ -55,7 +61,9 @@ exports.get = function (req, res) {
                 title: 'Bestsellers in Mumbai',
                 seeMoreTitle: 'See all bestseller in Mumbai',
                 seeMoreActionUrl: '/bestseller',
-                products: getProducts('Bestsellers', 4),
+                apiUrl: '/api/hb/products/Bestsellers',
+                // products: getProducts('Bestsellers', 4),
+                products: [],
             },
             {
                 sectionType: 'promo',
@@ -70,7 +78,9 @@ exports.get = function (req, res) {
                 title: 'Recently viewed',
                 seeMoreTitle: 'See 9 more',
                 seeMoreActionUrl: '/recently-viewed',
-                products: getProducts('Recent', 4),
+                apiUrl: '/api/hb/products/Recent',
+                // products: getProducts('Recent', 4),
+                products: [],
             },
             {
                 // embedded in section?? or out of section???
@@ -149,6 +159,35 @@ exports.delete = function(req, res){
     })
 };
 
+exports.getProducts = function (req, res) {
+    var type = req.params.type;
+    var pageNo = req.query.pageNo || 0;
+    var pageSize = req.query.pageSize || 4;
+    // console.log('type: ', type);
+    var i = Math.round(Math.random() * 10);
+    var products = getProducts(type, i > 3 ? i : 4);
+    setTimeout(function () {
+        res.send({
+            count: products.length,
+            products: products.slice(pageNo*pageSize, pageSize)
+        });
+    }, 500)
+};
+
+exports.atc = function (req, res) {
+    var pId = req.body.productId;
+    console.log('Product Id: ', pId);
+    var prob = Math.random();
+    setTimeout(function () {
+        if (prob < 0.1) {
+            res.send(400, {error: err});
+        } else if (prob < 0.25) {
+            res.send({action: 'failure', message: 'Price changed for this product.'})
+        } else {
+            res.send(req.body);
+        }
+    }, 500);
+};
 
 function handleError(res, err) {
     console.log('ERROR IS :',err);

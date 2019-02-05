@@ -27,14 +27,14 @@ var allowCrossDomain = function(req, res, next) {
         }
     }
 };
-app.use(allowCrossDomain);
+// app.use(allowCrossDomain);
 app.use(express.static(__dirname + '/../'));
 app.use(require('body-parser').json());
 require('./api')(app);
-var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/meanDemo-dev';
+// var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/meanDemo-dev';
 var port = process.env.PORT || 8085;
 
-mongoose.connect(mongoUrl);
+// mongoose.connect(mongoUrl);
 
 var server = app.listen(port , function () {
   console.log('App listening at http://localhost:%s', server.address().port);
