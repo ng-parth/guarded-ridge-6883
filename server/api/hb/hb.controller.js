@@ -175,18 +175,24 @@ exports.getProducts = function (req, res) {
 };
 
 exports.atc = function (req, res) {
-    var pId = req.body.productId;
+    var product = req.body;
+    var pId = product.id;
     console.log('Product Id: ', pId);
     var prob = Math.random();
     setTimeout(function () {
         if (prob < 0.1) {
-            res.send(400, {error: err});
+            res.send(400, {error: 'Error in adding to cart.'});
         } else if (prob < 0.25) {
             res.send({action: 'failure', message: 'Price changed for this product.'})
         } else {
-            res.send(req.body);
+            if (product.add) {
+                product.qtyInCart++;
+            } else {
+                product.qtyInCart--;
+            }
+            res.send(product);
         }
-    }, 500);
+    }, 1000);
 };
 
 function handleError(res, err) {
