@@ -6,7 +6,7 @@ var _ = require('lodash');
 var Bookmark = require('../bookmark/bookmark.model');
 function ProductCard (type, index) {
     this.id = type + '-' + index;
-    this.name = type + ' food ' + index;
+    this.name = type + ' ' + index;
     this.imageUrl = 'http://salemdigest.com/wp-content/uploads/2016/08/TITS_food1.jpg';
     this.regularPrice = Math.floor(Math.random() * 1000);
     this.discountPrice = Math.floor(Math.random() * 1000);
@@ -193,6 +193,38 @@ exports.atc = function (req, res) {
             res.send(product);
         }
     }, 1000);
+};
+
+exports.getCategoryProducts = function(req, res) {
+    var categoryPageName = req.params['categoryPageName'];
+    if (categoryPageName === 'all') {
+        var itemLength = 7;
+        const categories = [
+            'topical',
+            'chicken',
+            'mutton',
+            'coldcut',
+            'seafood',
+            'marinade',
+        ];
+        var resp =  _.map(categories, function(category) {
+            var categoryItems = [];
+            for (var i = 0; i < itemLength; i++) {
+                categoryItems.push(new ProductCard(category, i));
+            }
+            return {
+                title: category.toUpperCase(),
+                products: categoryItems,
+            };
+        });
+        return res.send({
+            filter: [], //?? Is is required?
+            sortBy: [],
+            products: resp,
+            categories,
+        });
+    }
+    return res.send({});
 };
 
 function handleError(res, err) {
