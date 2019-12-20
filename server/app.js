@@ -4,12 +4,14 @@
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
+const _ = require('lodash');
+
 var allowCrossDomain = function(req, res, next) {
     console.log('reqUrl: ', req.url);
-    if (req.url === '/' || req.url === '/favicon.ico' ) {
+    const origin = req.header('origin');
+    if (req.url === '/' || req.url === '/favicon.ico' || _.isUndefined(origin)) {
         next();
     } else {
-        var origin = req.header('origin');
         console.log('origin', origin);
         if ( origin && (origin.indexOf('localhost') > -1
             || origin.indexOf('ng-parth.xyz') > -1
