@@ -10,12 +10,15 @@ const cookieParser = require('cookie-parser');
 var allowCrossDomain = function(req, res, next) {
     console.log('reqUrl: ', req.url);
     const origin = req.header('origin');
-    if (req.url === '/' || req.url === '/favicon.ico' || _.isUndefined(origin)) {
+    if (req.url === '/' || req.url === '/p-club/profiles' || req.url === '/favicon.ico' || _.isUndefined(origin)) {
+        console.log('Calling next: ');
         next();
     } else {
         console.log('origin', origin);
         if ( origin && (origin.indexOf('localhost') > -1
             || origin.indexOf('ng-parth.xyz') > -1
+            || origin.indexOf('panchalclub') > -1
+            || origin.indexOf('chrome-extension') > -1
             || origin.indexOf('ng-parth') > -1
             || origin.indexOf('heroku') > -1
             || origin.indexOf('hb-demo') > -1
@@ -38,7 +41,7 @@ app.use(require('body-parser').json());
 app.use(cookieParser());
 require('./api')(app);
 var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/meanDemo-dev';
-const fallbackUrl = '';
+const fallbackUrl = 'mongodb://Admin:Admin@cluster0-shard-00-00-44dl6.mongodb.net:27017,cluster0-shard-00-01-44dl6.mongodb.net:27017,cluster0-shard-00-02-44dl6.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin';
 var port = process.env.PORT || 8085;
 
 mongoose.connect(mongoUrl).catch(err => {
