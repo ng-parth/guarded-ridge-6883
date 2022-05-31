@@ -18,6 +18,8 @@ var allowCrossDomain = function(req, res, next) {
         if ( origin && (origin.indexOf('localhost') > -1
             || origin.indexOf('ng-parth.xyz') > -1
             || origin.indexOf('panchalclub') > -1
+            || origin.indexOf('pclub') > -1
+            || origin.indexOf('vercel.app') > -1
             || origin.indexOf('chrome-extension') > -1
             || origin.indexOf('ng-parth') > -1
             || origin.indexOf('heroku') > -1
