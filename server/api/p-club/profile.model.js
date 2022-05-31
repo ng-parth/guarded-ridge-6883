@@ -8,6 +8,7 @@ var mongoose = require('mongoose'),
 
 var ProfileSchema = new Schema({
   id: String,
+  idText: String,
   name: String,
   surname: String,
   age: String,
@@ -31,6 +32,10 @@ var ProfileSchema = new Schema({
   mangalShani: String,
   aboutMe: String,
   imageUrl: String,
+  address: String,
+  contactNo: String,
+  email: String,
+  status: {type: String, default: 'ACTIVE'},
 });
 
 module.exports = mongoose.model('Profile', ProfileSchema);
