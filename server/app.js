@@ -7,6 +7,10 @@ var mongoose = require('mongoose');
 const _ = require('lodash');
 const cookieParser = require('cookie-parser');
 
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
+
 var allowCrossDomain = function(req, res, next) {
     console.log('reqUrl: ', req.url);
     const origin = req.header('origin');
@@ -43,12 +47,11 @@ app.use(require('body-parser').json());
 app.use(cookieParser());
 require('./api')(app);
 var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/meanDemo-dev';
-const fallbackUrl = 'mongodb://Admin:Admin@cluster0-shard-00-00-44dl6.mongodb.net:27017,cluster0-shard-00-01-44dl6.mongodb.net:27017,cluster0-shard-00-02-44dl6.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin';
-var port = process.env.PORT || 8085;
+var port = process.env.PORT || 8090;
 
 mongoose.connect(mongoUrl).catch(err => {
     console.log('Err connecting mongoose: Connecting to fallback.', /*err && err.message || */ '');
-    mongoose.connect(fallbackUrl);
+    mongoose.connect('mongodb://localhost/meanDemo-dev');
 });
 
 var server = app.listen(port , function () {
