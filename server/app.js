@@ -30,11 +30,12 @@ var allowCrossDomain = function(req, res, next) {
             || origin.indexOf('hb-demo') > -1
             || origin.indexOf('hb') > -1
             || origin.indexOf('github') > -1)) {
-                console.log('setting headers: ');
-                res.header('Access-Control-Allow-Credentials', true); // TODO: Check if this is required for prod
+            console.log('setting headers: ');
+            res.header('Access-Control-Allow-Credentials', true); // TODO: Check if this is required for prod
             res.header('Access-Control-Allow-Origin', origin);
             res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
             res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+            res.header('Access-Control-Allow-Headers', 'device-id, device-type, client-id, content-type');
             next();
         } else {
             res.sendStatus(401);

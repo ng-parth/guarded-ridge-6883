@@ -35,7 +35,9 @@ var ProfileSchema = new Schema({
   address: String,
   contactNo: String,
   email: String,
-  status: {type: String, default: 'ACTIVE'},
+  //connectionStatus: 'SHORTLISTED', 'REQUESTED', 'ACCEPTED', 'REJECTED', 'TALKS_IN_PROGRESS', 'NO_MATCH_DECLINE'
+  connectionStatus: {type: String, default: 'SHORTLISTED'},
+  status: {type: Boolean, default: true},
 });
 
 module.exports = mongoose.model('Profile', ProfileSchema);

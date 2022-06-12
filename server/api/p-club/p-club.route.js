@@ -8,7 +8,7 @@ router.get('/profiles', controller.getPaginatedProfiles);
 router.get('/profile/:_id', controller.getProfileDetails);
 router.post('/profile', controller.upsertProfile);
 router.delete('/profile/:_id', controller.deleteProfile);
-router.put('/profileStatus', controller.updateProfileStatus);
+router.put('/connectionStatus', controller.updateProfileStatus);
 router.put('/profileId', controller.updateProfileId);
 
 module.exports = router;

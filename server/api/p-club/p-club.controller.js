@@ -4,9 +4,9 @@ var Profile = require('./profile.model');
 
 exports.getPaginatedProfiles = function (req, resp) {
   console.log('getPaginatedProfiles: ');
-  Profile.find({ status: 'ACTIVE' }, function(err, profiles){
+  Profile.find({ status: true }, function(err, profiles){
     if (err) return handleError(resp, err);
-    resp.send({ status: 'success', data: profiles });
+    resp.send({ action: 'success', data: profiles });
   })
 }
 
@@ -15,17 +15,17 @@ exports.getProfileDetails = function (req, resp) {
   const { _id } = req.params;
   Profile.findOne({ _id }, function(err, profile) {
     if (err) return handleError(resp, err);
-    resp.send({ status: 'success', data: profile });
+    resp.send({ action: 'success', data: profile });
   });
 }
 
 exports.upsertProfile = function (req, resp) {
   var profile = req.body;
   console.log('upsertProfile: ', profile);
-  Profile.findOneAndUpdate({id: profile.id}, profile, {upsert: true}, function(err, profileResp){
+  Profile.findOneAndUpdate({_id: profile._id}, profile, {upsert: true}, function(err, profileResp){
     if (err) return handleError(resp, err);
     console.log('Upsert success: ', profileResp);
-    resp.send({status: 'success', data: profile.id});
+    resp.send({action: 'success', data: profile.id});
   })
 }
 
@@ -34,16 +34,16 @@ exports.deleteProfile = function (req, resp) {
   Profile.delete({ _id }, function(err, profileResp){
     if (err) return handleError(resp, err);
     console.log('Delete success: ', profileResp);
-    resp.send({ status: 'success' });
+    resp.send({ action: 'success' });
   })
 }
 
 exports.updateProfileStatus = function(req, resp) {
-  var { _id, status } = req.body;
-  Profile.findOneAndUpdate({ _id }, { status }, function(err, profileResp) {
+  var { _id, connectionStatus } = req.body;
+  Profile.findOneAndUpdate({ _id }, { connectionStatus }, function(err, profileResp) {
     if (err) return handleError(resp, err);
     console.log('Status Update Success: ', profileResp);
-    resp.send({ status: 'success' });
+    resp.send({ action: 'success' });
   });
 }
 
@@ -52,11 +52,11 @@ exports.updateProfileId = function(req, resp) {
   Profile.findOneAndUpdate({ _id }, { id }, function(err, profileResp) {
     if (err) return handleError(resp, err);
     console.log('Profile Id Update Success: ', profileResp);
-    resp.send({ status: 'success' });
+    resp.send({ action: 'success' });
   });
 }
 
 function handleError(res, err) {
   console.log('ERROR IS :',err);
-  return res.send(500, {error: err});
+  return res.send(500, {action: 'failure', error: err});
 }
