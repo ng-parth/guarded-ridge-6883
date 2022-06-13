@@ -22,7 +22,7 @@ exports.getProfileDetails = function (req, resp) {
 exports.upsertProfile = function (req, resp) {
   var profile = req.body;
   console.log('upsertProfile: ', profile);
-  Profile.findOneAndUpdate({_id: profile._id}, profile, {upsert: true}, function(err, profileResp){
+  Profile.findOneAndUpdate({id: profile.id}, profile, {upsert: true}, function(err, profileResp){
     if (err) return handleError(resp, err);
     console.log('Upsert success: ', profileResp);
     resp.send({action: 'success', data: profile.id});
