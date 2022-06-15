@@ -47,7 +47,7 @@ app.use(express.static(__dirname + '/../'));
 app.use(require('body-parser').json());
 app.use(cookieParser());
 require('./api')(app);
-var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/meanDemo-dev';
+var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/guarded-ridge-dev';
 var port = process.env.PORT || 8090;
 
 mongoose.connect(mongoUrl).catch(err => {
