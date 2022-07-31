@@ -10,7 +10,7 @@
     "dotenv": "^16.0.1",
     "express": "^4.12.3",
     "imagekit": "^4.1.0",
-    "lodash": ">=4.17.12",
+    "lodash": ">=4.17.21",
     "mongoose": ">=5.7.5"
   },
   "devDependencies": {
