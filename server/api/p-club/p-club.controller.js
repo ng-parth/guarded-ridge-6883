@@ -41,9 +41,17 @@ exports.upsertProfile = function (req, resp) {
     console.log('Err @uploadImageByUrl: ', fileErr);
     return handleError(fileErr);
   })
-
 }
 
+exports.hideProfile = function (req, resp) {
+  const { _id } = req.params;
+  console.log('Hide profile for _id: ', _id);
+  Profile.findOneAndUpdate({ _id }, { status: false }, function(err, profileResp) {
+    if (err) return handleError(resp, err);
+    console.log('Delete success: ', profileResp);
+    resp.send({ action: 'success' });
+  })
+}
 
 exports.deleteProfile = function (req, resp) {
   const { _id } = req.params;
