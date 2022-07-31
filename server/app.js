@@ -12,13 +12,13 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 var allowCrossDomain = function(req, res, next) {
-    console.log('reqUrl: ', req.url);
     const origin = req.header('origin');
-    if (req.url === '/' || req.url === '/p-club/profiles' || req.url === '/favicon.ico' || _.isUndefined(origin)) {
+    console.log('reqUrl: ', req.url);
+    console.log('origin', origin);
+    if (req.url === '/' || req.url === '/favicon.ico' || _.isUndefined(origin)) {
         console.log('Calling next: ');
         next();
     } else {
-        console.log('origin', origin);
         if ( origin && (origin.indexOf('localhost') > -1
             || origin.indexOf('ng-parth.xyz') > -1
             || origin.indexOf('panchalclub') > -1

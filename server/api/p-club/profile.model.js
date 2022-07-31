@@ -7,8 +7,8 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 var ProfileSchema = new Schema({
-  id: String,
-  idText: String,
+  idText: String, // original string extracted from html
+  id: String, // id extracted from actual idText
   name: String,
   surname: String,
   age: String,
@@ -31,7 +31,8 @@ var ProfileSchema = new Schema({
   specs: String,
   mangalShani: String,
   aboutMe: String,
-  imageUrl: String,
+  imageUrl: String, // imagekit url
+  originalImageUrl: String, // Original image url extracted from html
   address: String,
   contactNo: String,
   email: String,
