@@ -18,8 +18,8 @@ async function connectMongo(jobName, jobFunction) {
   console.log('Starting job: ', jobName);
   return await mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true }).catch(err => {
     console.log('Connection Failed: ', {mongoUrl, err})
-  }).then(async resp => {
-    console.log('Connected: ', !!resp);
+  }).then(async () => {
+    console.log('Connected to: ', mongoUrl);
     try {
       await jobFunction();
       console.log('Finished job: ', jobName);

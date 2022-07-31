@@ -1,5 +1,5 @@
 var ImageKit = require("imagekit");
-require('dotenv').config();
+// require('dotenv').config();
 
 var imagekit = new ImageKit({
   publicKey : process.env.IMK_PBL_KEY,
@@ -17,7 +17,15 @@ const uploadImageByUrl = uploadOptions => {
     useUniqueFileName,
     folder,
   }
-  return imagekit.upload(fileOptions);
+  console.log('Uploading image: ',  uploadOptions.file);
+  return imagekit.upload(fileOptions).then(
+    resp => {
+      console.log("Image Upload Success. New Url: ", resp.url);
+      return Promise.resolve(resp);
+    }).catch(err => {
+    console.log("Image Upload Failed: ", err);
+    return Promise.reject(err);
+  });
 };
 
 const FileUploadService = { uploadImageByUrl };
