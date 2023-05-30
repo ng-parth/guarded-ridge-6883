@@ -36,6 +36,7 @@ var ProfileSchema = new Schema({
   address: String,
   contactNo: String,
   email: String,
+  gender: String,
   //connectionStatus: 'SHORTLISTED', 'REQUESTED', 'ACCEPTED', 'REJECTED', 'TALKS_IN_PROGRESS', 'NO_MATCH_DECLINE'
   connectionStatus: {type: String, default: 'SHORTLISTED', required: true},
   status: {type: Boolean, default: true, required: true},

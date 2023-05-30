@@ -3,5 +3,8 @@
     "name": "guarded-ridge-node",
     "builds": [
         { "src": "server/app.js", "use": "@vercel/node" }
+    ],
+    "routes": [
+        { "src": "/(.*)", "dest": "/app.js" }
     ]
 }
