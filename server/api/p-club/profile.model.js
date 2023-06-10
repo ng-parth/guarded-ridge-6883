@@ -5,6 +5,7 @@
 
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
+// const {Decimal128} = require("mongoose/lib/types");
 
 var ProfileSchema = new Schema({
   idText: String, // original string extracted from html
@@ -37,6 +38,19 @@ var ProfileSchema = new Schema({
   contactNo: String,
   email: String,
   gender: String,
+  lat: String,
+  lng: String,
+  matchMakingData: {
+    year: Number,
+    month: Number,
+    date: Number,
+    hours: Number,
+    minutes: Number,
+    seconds: Number,
+    latitude: String,
+    longitude: String,
+    timezone: {type: String, default: 5.5, required: true},
+  },
   //connectionStatus: 'SHORTLISTED', 'REQUESTED', 'ACCEPTED', 'REJECTED', 'TALKS_IN_PROGRESS', 'NO_MATCH_DECLINE'
   connectionStatus: {type: String, default: 'SHORTLISTED', required: true},
   status: {type: Boolean, default: true, required: true},
