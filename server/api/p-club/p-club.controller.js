@@ -163,6 +163,26 @@ exports.syncMatches = async (req, resp) => {
   }
 }
 
+exports.getMatchDetails = async (req, resp) => {
+  const { profileId } = req.params;
+  try {
+    const { gender, id } = await Profile.findOne({ _id: profileId });
+    let genderKey = 'femaleId';
+    const matchFilters = {};
+    if (gender.toLowerCase() === 'male') genderKey = 'maleId'
+    matchFilters[genderKey] = id;
+    const matchMaps = await MatchMap
+      .find(matchFilters)
+      .select('maleId femaleId matched_on match_score out_of')
+      .sort({match_score: 'desc'});
+    console.log('matchMaps: ', matchMaps.length);
+    resp.send({ status: 'success', data: matchMaps })
+  } catch (e) {
+    console.log('Err @getMatchDetails: ', e);
+    handleError(resp, e)
+  }
+}
+
 function handleError(res, err) {
   console.log('ERROR IS :',err);
   return res.send(500, {action: 'failure', error: err});

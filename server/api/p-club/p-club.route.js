@@ -11,6 +11,7 @@ router.delete('/profile/:_id', controller.deleteProfile);
 router.put('/softDelete/:_id', controller.hideProfile);
 router.put('/connectionStatus', controller.updateProfileStatus);
 router.put('/profileId', controller.updateProfileId);
-router.get('/sync-match/:profileId', controller.syncMatches);
+router.put('/sync-match/:profileId', controller.syncMatches);
+router.get('/get-matches/:profileId', controller.getMatchDetails);
 
 module.exports = router;
