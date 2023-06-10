@@ -38,8 +38,8 @@ var ProfileSchema = new Schema({
   contactNo: String,
   email: String,
   gender: String,
-  lat: String,
-  lng: String,
+  lat: Number,
+  lng: Number,
   matchMakingData: {
     year: Number,
     month: Number,
@@ -47,9 +47,9 @@ var ProfileSchema = new Schema({
     hours: Number,
     minutes: Number,
     seconds: Number,
-    latitude: String,
-    longitude: String,
-    timezone: {type: String, default: 5.5, required: true},
+    latitude: Number,
+    longitude: Number,
+    timezone: {type: Number, default: 5.5, required: true},
   },
   //connectionStatus: 'SHORTLISTED', 'REQUESTED', 'ACCEPTED', 'REJECTED', 'TALKS_IN_PROGRESS', 'NO_MATCH_DECLINE'
   connectionStatus: {type: String, default: 'SHORTLISTED', required: true},
