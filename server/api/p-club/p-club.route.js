@@ -5,7 +5,8 @@ var controller = require('./p-club.controller');
 var router = express.Router();
 
 router.get('/profiles', controller.getPaginatedProfiles);
-router.get('/profile/:_id', controller.getProfileDetails);
+// router.get('/profile/:_id', controller.getProfileDetails);
+router.get('/profile/:_id', controller.getMatchDetails);
 router.post('/profile', controller.upsertProfile);
 router.delete('/profile/:_id', controller.deleteProfile);
 router.put('/softDelete/:_id', controller.hideProfile);

@@ -7,7 +7,8 @@ const {ALL_SETTLED_RESULTS, astroMatchConfig, MATCH_FAILED} = require("../../ser
 
 // const profiles = [[{"key":"id","value":"Id No:- 5671: PROFILE OF (GAJJAR) STUTI ","displayText":"Id"},{"key":"name","value":"(GAJJAR) STUTI ","displayText":"Name"},{"key":"surname","value":"SUTHAR","displayText":"Surname"},{"key":"age","value":"29","displayText":"Age"},{"key":"height","value":"5'-4''","displayText":"Height"},{"key":"weight","value":"70\n      K.G","displayText":"Weight"},{"key":"qualification","value":"M.COM.&nbsp;","displayText":"Qualification"},{"key":"occupation","value":"BANKING SECTOR","displayText":"Occupation"},{"key":"native","value":"UMARETH","displayText":"Native"},{"key":"father","value":"KAMLESHBHAI GAJJAR","displayText":"Father"},{"key":"fatherOccupation","value":"GRAPHICS DESIGNING","displayText":"Father's Occupation"},{"key":"mother","value":"BHARGAVIBEN GAJJAR","displayText":"Mother"},{"key":"motherOccupation","value":"HOUSE WIFE","displayText":"Mother's Occupation"},{"key":"brothers","value":"1","displayText":"Brothers"},{"key":"sisters","value":"0","displayText":"Sisters"},{"key":"familyIncome","value":"2,00,000","displayText":"Family Income"},{"key":"personalIncome","value":"4.00.000","displayText":"Personal Income"},{"key":"birthDate","value":"D.O.B.-&nbsp;\n      4/11/1992","displayText":"Birth Date"},{"key":"birthTime","value":"BIRTH\n      TIME:-12.54 PM","displayText":"Birth Time"},{"key":"birthPlace","value":"BIRTH\n      PLACE:-AHMEDABAD","displayText":"Birth Place"},{"key":"specs","value":"SPECT:-NO","displayText":"Specs"},{"key":"mangalShani","value":"MANGAL/SHANI:-MANGAL","displayText":"Mangal/Shani?"},{"key":"aboutMe","value":"","displayText":"About Me"},{"key":"imageUrl","value":"","displayText":"Image Url"}]];
 
-const mainKey = '_id';
+// Moving it back to id from _id bcs _id is typeof === ObjectId and it's creating lot of issues in aggregate and populate functions
+const mainKey = 'id';
 
 exports.getPaginatedProfiles = function (req, resp) {
   console.log('getPaginatedProfiles: ');
@@ -159,12 +160,19 @@ exports.syncMatches = async (req, resp) => {
 exports.getMatchDetails = async (req, resp) => {
   const { profileId } = req.params;
   try {
-    const profile = await Profile.findOne({ _id: profileId });
+    const profile = await Profile.findOne({ _id: profileId }, { originalImageUrl: 0 }).lean();
     const mainKeyValue = `${profile[mainKey]}`;
-    const {gender, genderKey } = Utils.getGenderKeys(profile.gender);
+    const {gender, genderKey, otherGender, otherGenderKey } = Utils.getGenderKeys(profile.gender);
     const matchFilters = {};
     matchFilters[genderKey] = mainKeyValue;
     console.log('Keys: ', gender, matchFilters);
+    const $project = {
+      matchedOn: 1,
+      matchScore: 1,
+      outOf: 1,
+      details: { _id: 1, name: 1, surname: 1 },
+    }
+    $project[otherGenderKey] = 1;
     const matchMaps = await MatchMap
       // .find(matchFilters)
       .aggregate([
@@ -172,35 +180,26 @@ exports.getMatchDetails = async (req, resp) => {
         {
           $lookup: {
             from: "profiles", // collection name in db
-            localField: "maleId",
-            foreignField: "id",
-            as: "maleDetails",
-          },
-        }, {
-          $lookup: {
-            from: "profiles", // collection name in db
-            localField: "femaleId",
-            foreignField: "id",
-            as: "femaleDetails",
+            localField: otherGenderKey,
+            foreignField: mainKey,
+            as: "details",
           },
         },
-        {
-          $project: {
-            maleId: 1,
-            femaleId: 1,
-            matchedOn: 1,
-            matchScore: 1,
-            outOf: 1,
-            maleDetails: { id: 1, _id: 1, name: 1, surname: 1 },
-            femaleDetails: { id: 1, _id: 1, name: 1, surname: 1 },
-          }
-        },
+        { $project },
+        { $unwind: '$details'},
         { $sort : { matchScore: -1 }},
       ])
-    // .select('maleId femaleId matched_on match_score out_of maleDetails femaleDetails')
-    // .sort({match_score: 'desc'});
+    // .select('maleId femaleId matchedOn matchScore outOf')
+    // .sort({match_score: 'desc'}).then(async matches => {
+    //   const matchIds = matches.map(m => m[otherGenderKey]);
+    //   const filters = {};
+    //   filters[otherGenderKey] = {$in: matchIds};
+    //   const matchingProfiles = await Profiles.find(filters);
+    //
+    //   });
     console.log('matchMaps: ', matchMaps.length);
-    resp.send({ status: 'success', data: matchMaps })
+    profile.matches = matchMaps;
+    resp.send({ status: 'success', data: profile })
   } catch (e) {
     console.log('Err @getMatchDetails: ', e);
     handleError(resp, e)
