@@ -160,7 +160,7 @@ exports.syncMatches = async (req, resp) => {
 exports.getMatchDetails = async (req, resp) => {
   const { _id } = req.params;
   try {
-    const profile = await Profile.findOne({ _id: profileId }, { originalImageUrl: 0 }).lean();
+    const profile = await Profile.findOne({ _id }, { originalImageUrl: 0 }).lean();
     const mainKeyValue = `${profile[mainKey]}`;
     const {gender, genderKey, otherGender, otherGenderKey } = Utils.getGenderKeys(profile.gender);
     const matchFilters = {};
