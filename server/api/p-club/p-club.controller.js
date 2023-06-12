@@ -7,6 +7,8 @@ const {ALL_SETTLED_RESULTS, astroMatchConfig, MATCH_FAILED} = require("../../ser
 
 // const profiles = [[{"key":"id","value":"Id No:- 5671: PROFILE OF (GAJJAR) STUTI ","displayText":"Id"},{"key":"name","value":"(GAJJAR) STUTI ","displayText":"Name"},{"key":"surname","value":"SUTHAR","displayText":"Surname"},{"key":"age","value":"29","displayText":"Age"},{"key":"height","value":"5'-4''","displayText":"Height"},{"key":"weight","value":"70\n      K.G","displayText":"Weight"},{"key":"qualification","value":"M.COM.&nbsp;","displayText":"Qualification"},{"key":"occupation","value":"BANKING SECTOR","displayText":"Occupation"},{"key":"native","value":"UMARETH","displayText":"Native"},{"key":"father","value":"KAMLESHBHAI GAJJAR","displayText":"Father"},{"key":"fatherOccupation","value":"GRAPHICS DESIGNING","displayText":"Father's Occupation"},{"key":"mother","value":"BHARGAVIBEN GAJJAR","displayText":"Mother"},{"key":"motherOccupation","value":"HOUSE WIFE","displayText":"Mother's Occupation"},{"key":"brothers","value":"1","displayText":"Brothers"},{"key":"sisters","value":"0","displayText":"Sisters"},{"key":"familyIncome","value":"2,00,000","displayText":"Family Income"},{"key":"personalIncome","value":"4.00.000","displayText":"Personal Income"},{"key":"birthDate","value":"D.O.B.-&nbsp;\n      4/11/1992","displayText":"Birth Date"},{"key":"birthTime","value":"BIRTH\n      TIME:-12.54 PM","displayText":"Birth Time"},{"key":"birthPlace","value":"BIRTH\n      PLACE:-AHMEDABAD","displayText":"Birth Place"},{"key":"specs","value":"SPECT:-NO","displayText":"Specs"},{"key":"mangalShani","value":"MANGAL/SHANI:-MANGAL","displayText":"Mangal/Shani?"},{"key":"aboutMe","value":"","displayText":"About Me"},{"key":"imageUrl","value":"","displayText":"Image Url"}]];
 
+const mainKey = '_id';
+
 exports.getPaginatedProfiles = function (req, resp) {
   console.log('getPaginatedProfiles: ');
   Profile.find({ status: true }, { originalImageUrl: 0 }, function(err, profiles){
@@ -86,16 +88,17 @@ exports.updateProfileId = function(req, resp) {
 exports.syncMatches = async (req, resp) => {
   const { profileId } = req.params;
   try {
-    const { gender, matchMakingData, id } = await Profile.findOne({ _id: profileId });
-    // console.log('Gender: ', gender);
-    const filter = gender.toLowerCase() === 'male' ? { maleId: id } : { femaleId: id };
+    const profile = await Profile.findOne({ _id: profileId });
+    const { matchMakingData } = profile;
+    const mainKeyValue = `${profile[mainKey]}`;
+    const {gender, otherGender, genderKey, otherGenderKey} = Utils.getGenderKeys(profile.gender);
+    const filter = {};
+    filter[genderKey] = mainKeyValue;
     const alreadyMatchedProfiles = await MatchMap.find(filter);
     console.log('Matches: ', alreadyMatchedProfiles.length);
     const profileFilters = { gender: {$ne: gender} };
     if (alreadyMatchedProfiles?.length) {
-      let genderKey = 'maleId';
-      if (gender.toLowerCase() === 'male') genderKey = 'femaleId'
-      profileFilters['id'] = { $nin: alreadyMatchedProfiles.map(p => p[genderKey]) };
+      profileFilters[mainKey] = { $nin: alreadyMatchedProfiles.map(p => p[otherGenderKey]) };
     }
     console.log('ProfileFilters: ', profileFilters);
     const newProfiles = await Profile
@@ -106,41 +109,31 @@ exports.syncMatches = async (req, resp) => {
     console.log('New Profiles: ', newProfiles.length);
     const matchPromises = newProfiles.map(p => {
       const payload = {};
-      if (gender.toLowerCase() === 'male') {
-        payload.male = matchMakingData;
-        payload.female = p.matchMakingData;
-      } else {
-        payload.female = matchMakingData;
-        payload.male = p.matchMakingData;
-      }
+      payload[gender.toLowerCase()] = matchMakingData;
+      payload[otherGender.toLowerCase()] = p.matchMakingData;
       return getMatch(payload);
     })
     const matchResult = await Promise.allSettled(matchPromises);
     const upsertResults = await Promise.allSettled(matchResult.map(({status, reason, value}, i) => {
       // console.log('{status, reason, value}: ', status, reason, value);
       const matchMap = {
-        match_score: 0,
-        out_of: 0,
-        match_output: reason || MATCH_FAILED.OTHER_ISSUES,
-        matched_on: new Date(),
-        match_config: astroMatchConfig,
+        matchScore: 0,
+        outOf: 0,
+        matchOutput: reason || MATCH_FAILED.OTHER_ISSUES,
+        matchedOn: new Date(),
+        matchConfig: astroMatchConfig,
       };
-      if (gender.toLowerCase() === 'male') {
-        matchMap.maleId = id;
-        matchMap.femaleId = newProfiles[i]['id'];
-      } else {
-        matchMap.femaleId = id;
-        matchMap.maleId = newProfiles[i]['id'];
-      }
+      matchMap[genderKey] = mainKeyValue;
+      matchMap[otherGenderKey] = newProfiles[i][mainKey];
       const {maleId, femaleId} = matchMap;
       if (status === ALL_SETTLED_RESULTS.FULFILLED) {
         const { statusCode, output } = value.data;
         if (statusCode === 200) {
-          matchMap.match_output = output;
-          matchMap.out_of = output.out_of;
-          matchMap.match_score = output.total_score;
+          matchMap.matchOutput = output;
+          matchMap.outOf = output.out_of;
+          matchMap.matchScore = output.total_score;
         } else {
-          matchMap.match_output = MATCH_FAILED.API_ISSUE;
+          matchMap.matchOutput = MATCH_FAILED.API_ISSUE;
         }
       }
       return MatchMap.findOneAndUpdate({maleId, femaleId}, matchMap, {upsert: true}, e => {
@@ -166,15 +159,46 @@ exports.syncMatches = async (req, resp) => {
 exports.getMatchDetails = async (req, resp) => {
   const { profileId } = req.params;
   try {
-    const { gender, id } = await Profile.findOne({ _id: profileId });
-    let genderKey = 'femaleId';
+    const profile = await Profile.findOne({ _id: profileId });
+    const mainKeyValue = `${profile[mainKey]}`;
+    const {gender, genderKey } = Utils.getGenderKeys(profile.gender);
     const matchFilters = {};
-    if (gender.toLowerCase() === 'male') genderKey = 'maleId'
-    matchFilters[genderKey] = id;
+    matchFilters[genderKey] = mainKeyValue;
+    console.log('Keys: ', gender, matchFilters);
     const matchMaps = await MatchMap
-      .find(matchFilters)
-      .select('maleId femaleId matched_on match_score out_of')
-      .sort({match_score: 'desc'});
+      // .find(matchFilters)
+      .aggregate([
+        { $match: matchFilters },
+        {
+          $lookup: {
+            from: "profiles", // collection name in db
+            localField: "maleId",
+            foreignField: "id",
+            as: "maleDetails",
+          },
+        }, {
+          $lookup: {
+            from: "profiles", // collection name in db
+            localField: "femaleId",
+            foreignField: "id",
+            as: "femaleDetails",
+          },
+        },
+        {
+          $project: {
+            maleId: 1,
+            femaleId: 1,
+            matchedOn: 1,
+            matchScore: 1,
+            outOf: 1,
+            maleDetails: { id: 1, _id: 1, name: 1, surname: 1 },
+            femaleDetails: { id: 1, _id: 1, name: 1, surname: 1 },
+          }
+        },
+        { $sort : { matchScore: -1 }},
+      ])
+    // .select('maleId femaleId matched_on match_score out_of maleDetails femaleDetails')
+    // .sort({match_score: 'desc'});
     console.log('matchMaps: ', matchMaps.length);
     resp.send({ status: 'success', data: matchMaps })
   } catch (e) {

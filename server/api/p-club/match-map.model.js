@@ -9,11 +9,11 @@ var mongoose = require('mongoose'),
 var MatchMapSchema = new Schema({
   maleId: String,
   femaleId: String,
-  match_output: Object,
-  match_score: Number,
-  out_of: Number,
-  matched_on: Date,
-  match_config: Object,
+  matchOutput: Object,
+  matchScore: Number,
+  outOf: Number,
+  matchedOn: Date,
+  matchConfig: Object,
 });
 
 module.exports = mongoose.model('MatchMap', MatchMapSchema, 'match_map');
