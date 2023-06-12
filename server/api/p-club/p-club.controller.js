@@ -158,7 +158,7 @@ exports.syncMatches = async (req, resp) => {
 }
 
 exports.getMatchDetails = async (req, resp) => {
-  const { profileId } = req.params;
+  const { _id } = req.params;
   try {
     const profile = await Profile.findOne({ _id: profileId }, { originalImageUrl: 0 }).lean();
     const mainKeyValue = `${profile[mainKey]}`;

@@ -13,6 +13,6 @@ router.put('/softDelete/:_id', controller.hideProfile);
 router.put('/connectionStatus', controller.updateProfileStatus);
 router.put('/profileId', controller.updateProfileId);
 router.put('/sync-match/:profileId', controller.syncMatches);
-router.get('/get-matches/:profileId', controller.getMatchDetails);
+router.get('/get-matches/:_id', controller.getMatchDetails);
 
 module.exports = router;
