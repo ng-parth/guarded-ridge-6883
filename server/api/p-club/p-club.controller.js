@@ -104,7 +104,7 @@ exports.syncMatches = async (req, resp) => {
     console.log('ProfileFilters: ', profileFilters);
     const newProfiles = await Profile
       .find(profileFilters)
-      .limit(2)
+      // .limit(2)
       .select('_id matchMakingData id');
     // console.log('New Profiles: ', newProfiles.length, newProfiles.map(p => p.id));
     console.log('New Profiles: ', newProfiles.length);
@@ -115,17 +115,13 @@ exports.syncMatches = async (req, resp) => {
       return getMatch(payload);
     })
     const matchResult = await Promise.allSettled(matchPromises);
-    console.log('Got Match results: ', matchResult.map(({ reason }) => reason?.response));
-    if (matchResult.filter(({status}) => status === ALL_SETTLED_RESULTS.REJECTED) > 0) {
-      console.log("sending failure response: ");
-      resp.status(500).send(matchResult);
-    }
+    // console.log('Got Match results: ', matchResult.map(({ reason }) => reason?.response));
     const upsertResults = await Promise.allSettled(matchResult.map(({status, reason, value}, i) => {
       // console.log('{status, reason, value}: ', status, reason, value);
       const matchMap = {
         matchScore: 0,
         outOf: 0,
-        matchOutput: reason || MATCH_FAILED.OTHER_ISSUES,
+        matchOutput: reason?.response?.data || MATCH_FAILED.OTHER_ISSUES,
         matchedOn: new Date(),
         matchConfig: astroMatchConfig,
       };
