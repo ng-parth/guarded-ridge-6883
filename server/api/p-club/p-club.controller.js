@@ -104,7 +104,7 @@ exports.syncMatches = async (req, resp) => {
     console.log('ProfileFilters: ', profileFilters);
     const newProfiles = await Profile
       .find(profileFilters)
-      // .limit(2)
+      .limit(3)
       .select('_id matchMakingData id');
     // console.log('New Profiles: ', newProfiles.length, newProfiles.map(p => p.id));
     console.log('New Profiles: ', newProfiles.length);
