@@ -115,8 +115,9 @@ exports.syncMatches = async (req, resp) => {
       return getMatch(payload);
     })
     const matchResult = await Promise.allSettled(matchPromises);
-    console.log('Got Match results: ', matchResult);
+    console.log('Got Match results: ', matchResult.map(({ reason }) => reason?.response));
     if (matchResult.filter(({status}) => status === ALL_SETTLED_RESULTS.REJECTED) > 0) {
+      console.log("sending failure response: ");
       resp.status(500).send(matchResult);
     }
     const upsertResults = await Promise.allSettled(matchResult.map(({status, reason, value}, i) => {
