@@ -9,10 +9,11 @@
     "cookie-parser": "^1.4.4",
     "dotenv": "^16.0.1",
     "express": "^4.17.3",
+    "google-auth-library": "^8.9.0",
     "imagekit": "^4.1.0",
     "lodash": ">=4.17.12",
     "moment": "^2.29.4",
-    "mongoose": ">=5.7.5"
+    "mongoose": "^5.13.16"
   },
   "devDependencies": {
     "nodemon": "^2.0.16"
@@ -21,6 +22,7 @@
     "local": "nodemon server/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "engines": {"node": "16"},
   "author": "Parth Mistry",
   "license": "ISC"
 }

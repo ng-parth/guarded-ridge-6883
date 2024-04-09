@@ -13,10 +13,11 @@ module.exports = function(app){
     var api = dir[i];
     // console.log('api: ', api);
     if (api === 'hb') {
-      app.use('/hb', require('./'+api+'/'+api+'.route'));  
+      app.use('/hb', require('./'+api+'/'+api+'.route'));
     } else {}
     app.use('/api/'+api,require('./'+api+'/'+api+'.route'));
   }
-  
+
   app.use('/api/',require('./hb/hb.route'));
+  app.use(require('./auth/auth.route'));
 };
