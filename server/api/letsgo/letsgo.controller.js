@@ -8,35 +8,33 @@ const { nanoid } = nanoidService;
 
 exports.getRouteTags = function (req, resp) {
   // console.log('getRouteTags: ');
-  RouteTags.find({ status: true }, function(err, tags){
-    if (err) return handleError(resp, err);
+  RouteTags.find({ status: true }).then(tags => {
     if (!tags.length) {
       const rTags = ['Century => RGGC', 'Century => Kalanagar', "Century => Bharatnagar", "Century => WeW", "WeW => Kalanagar", "WeW => Century", "Kalanagar => Century"].map(t => new RouteTags({ id: nanoid(5), tagName: t}));
-      RouteTags.insertMany(rTags, function(e, result) {
-        if (err) return handleError(resp, e);
+      RouteTags.insertMany(rTags).then(function(result) {
         resp.send({ action: 'success', data: result });
-      })
+      }).catch(err => handleError(err));
     } else resp.send({ action: 'success', data: tags });
-  })
+  }).catch(err => handleError(resp, err));
 }
 exports.getRoutes = function (req, resp) {
   // console.log('getRoutes: ', req.params);
   const findQuery = { status: true, ...(req.params || {}) };
-  Route.find(findQuery, {apiUrl: 0}, function(err, routes){
-    if (err) return handleError(resp, err);
-    if (!routes.length) {
-      const RouteSample = new Route({
-        busNo: 'C-54',
-        routeName: 'WeW => Worli',
-        stopName: 'Canara Bank',
-        apiUrl: 'https://chalo.com/app/api/vasudha/track/route-live-info/mumbai/RHKEuZAj',
-        defaultStopId: 'lrLRBtaE',
-      })
-      Route.create(RouteSample,function(err, route){
-        resp.send({ action: 'success', data: [route] });
-      })
-    } else resp.send({ action: 'success', data: routes });
-  })
+  Route.find(findQuery, {apiUrl: 0}).then(function(routes){
+    // if (!routes.length) {
+    //   const RouteSample = new Route({
+    //     busNo: 'C-54',
+    //     routeName: 'WeW => Worli',
+    //     stopName: 'Canara Bank',
+    //     apiUrl: 'https://chalo.com/app/api/vasudha/track/route-live-info/mumbai/RHKEuZAj',
+    //     defaultStopId: 'lrLRBtaE',
+    //   })
+    //   Route.create(RouteSample,function(err, route){
+    //     resp.send({ action: 'success', data: [route] });
+    //   })
+    // } else
+    resp.send({ action: 'success', data: routes });
+  }).catch(err => handleError(err));
 }
 
 exports.getRouteStatus = function (req, resp) {
