@@ -3,15 +3,17 @@
   "version": "1.0.0",
   "description": "MEAN app ",
   "main": "index.js",
+  "type": "commonjs",
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^1.6.8",
     "body-parser": "^1.12.2",
     "cookie-parser": "^1.4.4",
     "dotenv": "^16.0.1",
     "express": "^4.17.3",
     "imagekit": "^4.1.0",
     "lodash": ">=4.17.12",
-    "mongoose": ">=5.7.5"
+    "mongoose": ">=5.7.5",
+    "nanoid": "^3.3.7"
   },
   "devDependencies": {
     "nodemon": "^2.0.16"
