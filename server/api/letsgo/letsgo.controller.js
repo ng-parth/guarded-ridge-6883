@@ -8,31 +8,20 @@ const { nanoid } = nanoidService;
 
 exports.getRouteTags = function (req, resp) {
   // console.log('getRouteTags: ');
-  RouteTags.find({ status: true }).then(tags => {
-    if (!tags.length) {
-      const rTags = ['Century => RGGC', 'Century => Kalanagar', "Century => Bharatnagar", "Century => WeW", "WeW => Kalanagar", "WeW => Century", "Kalanagar => Century"].map(t => new RouteTags({ id: nanoid(5), tagName: t}));
-      RouteTags.insertMany(rTags).then(function(result) {
-        resp.send({ action: 'success', data: result });
-      }).catch(err => handleError(err));
-    } else resp.send({ action: 'success', data: tags });
+  RouteTags.find({ status: true }, {id: 1, tagName: 1}).then(tags => {
+    // if (!tags.length) {
+    //   const rTags = ['Century => RGGC', 'Century => Kalanagar', "Century => Bharatnagar", "Century => WeW", "WeW => Kalanagar", "WeW => Century", "Kalanagar => Century"].map(t => new RouteTags({ id: nanoid(5), tagName: t}));
+    //   RouteTags.insertMany(rTags).then(function(result) {
+    //     resp.send({ action: 'success', data: result });
+    //   }).catch(err => handleError(err));
+    // } else
+    resp.send({ action: 'success', data: tags });
   }).catch(err => handleError(resp, err));
 }
 exports.getRoutes = function (req, resp) {
   // console.log('getRoutes: ', req.params);
   const findQuery = { status: true, ...(req.params || {}) };
   Route.find(findQuery, {apiUrl: 0}).then(function(routes){
-    // if (!routes.length) {
-    //   const RouteSample = new Route({
-    //     busNo: 'C-54',
-    //     routeName: 'WeW => Worli',
-    //     stopName: 'Canara Bank',
-    //     apiUrl: 'https://chalo.com/app/api/vasudha/track/route-live-info/mumbai/RHKEuZAj',
-    //     defaultStopId: 'lrLRBtaE',
-    //   })
-    //   Route.create(RouteSample,function(err, route){
-    //     resp.send({ action: 'success', data: [route] });
-    //   })
-    // } else
     resp.send({ action: 'success', data: routes });
   }).catch(err => handleError(err));
 }
@@ -40,12 +29,11 @@ exports.getRoutes = function (req, resp) {
 exports.getRouteStatus = function (req, resp) {
   console.log('getRouteStatus: ', req.params);
   const { routeId } = req.params;
-  Route.findOne({ _id: routeId }, function(err, route) {
-    if (err) return handleError(resp, err);
+  Route.findOne({ _id: routeId }).then(route => {
     RouteService.getRouteStatus(route)
         .then(routeStatus => resp.send({ action: 'success', data: routeStatus }))
         .catch(e => handleError(resp, e));
-  });
+  }).catch(err => handleError(err));
 }
 
 exports.postRoute = function (req, resp) {
