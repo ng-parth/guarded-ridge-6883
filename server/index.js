@@ -6,6 +6,7 @@ var app = express();
 var mongoose = require('mongoose');
 const _ = require('lodash');
 const cookieParser = require('cookie-parser');
+const bodyParser = require("body-parser");
 
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
@@ -42,9 +43,11 @@ var allowCrossDomain = function(req, res, next) {
         }
     }
 };
+
 app.use(allowCrossDomain);
 app.use(express.static(__dirname + '/../'));
-app.use(require('body-parser').json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 require('./api')(app);
 var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/guarded-ridge-dev';
