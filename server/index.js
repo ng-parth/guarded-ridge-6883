@@ -61,6 +61,7 @@ mongoose.connect(mongoUrl).catch(err => {
 var server = app.listen(port , function () {
   console.log('App listening at http://localhost:%s', server.address().port);
 });
-app.use('/', express.static(__dirname + '/../'));
+// app.use('/', express.static(__dirname + '/../'));
+app.use('/', (req, res) => res.sendFile(__dirname + '/../index.html'));
 
 module.exports = app;
