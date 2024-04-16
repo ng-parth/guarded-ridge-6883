@@ -45,7 +45,7 @@ var allowCrossDomain = function(req, res, next) {
 };
 
 app.use(allowCrossDomain);
-app.use(express.static(__dirname + '/../'));
+// app.use(express.static(__dirname + '/../'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -61,5 +61,6 @@ mongoose.connect(mongoUrl).catch(err => {
 var server = app.listen(port , function () {
   console.log('App listening at http://localhost:%s', server.address().port);
 });
+app.use('/', express.static(__dirname + '/../'));
 
 module.exports = app;
