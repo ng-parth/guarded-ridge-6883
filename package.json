@@ -19,7 +19,7 @@
     "nodemon": "^2.0.16"
   },
   "scripts": {
-    "local": "nodemon server/app.js",
+    "local": "nodemon server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Parth Mistry",
