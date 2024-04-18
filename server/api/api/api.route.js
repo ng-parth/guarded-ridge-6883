@@ -8,5 +8,6 @@ var router = express.Router();
 
 router.get('/trackApi', controller.trackApi);
 router.get('/getApis', controller.getApis);
+router.post('/report-error', controller.postError);
 
 module.exports = router;
