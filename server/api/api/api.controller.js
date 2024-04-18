@@ -24,3 +24,18 @@ exports.getApis = function(req, res){
     res.send(apis);
   })
 };
+
+exports.postError = function(req, res) {
+  const errObj = req.body;
+  // console.log('errObj', errObj);
+  errObj.createdTs = new Date().getTime();
+  errObj.apiInfo = JSON.parse(errObj.apiInfo);
+  Api.create(errObj).then(errRecord => {
+    res.sendStatus(200);
+  }).catch(err => handleError(res, err))
+}
+
+function handleError(res, err) {
+  console.log('ERROR IS :',err);
+  return res.send(500, {action: 'failure', error: err});
+}
