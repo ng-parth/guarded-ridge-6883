@@ -12,6 +12,7 @@ var RouteSchema = new Schema({
   routeName: String, //src => destination
   stopName: String,
   apiUrl: String,
+  webUrl: String,
   defaultStopId: String,
   isPublic: {type: Boolean, default: true, required: true},
   tags: [String],
