@@ -8,7 +8,7 @@ const { nanoid } = nanoidService;
 
 exports.getRouteTags = function (req, resp) {
   // console.log('getRouteTags: ');
-  RouteTags.find({ status: true }, {id: 1, tagName: 1}).then(tags => {
+  RouteTags.find({ status: true }, {id: 1, tagName: 1, _id: 0}).sort({tagName: 1}).then(tags => {
     // if (!tags.length) {
     //   const rTags = ['Century => RGGC', 'Century => Kalanagar', "Century => Bharatnagar", "Century => WeW", "WeW => Kalanagar", "WeW => Century", "Kalanagar => Century"].map(t => new RouteTags({ id: nanoid(5), tagName: t}));
     //   RouteTags.insertMany(rTags).then(function(result) {
@@ -31,7 +31,7 @@ exports.postRouteTag = function (req, resp) {
 exports.getRoutes = function (req, resp) {
   // console.log('getRoutes: ', req.params);
   const findQuery = { status: true, ...(req.params || {}) };
-  Route.find(findQuery, {apiUrl: 0}).then(function(routes){
+  Route.find(findQuery, {apiUrl: 0, _id: 0}).then(function(routes){
     resp.send({ action: 'success', data: routes });
   }).catch(err => handleError(resp, err));
 }
@@ -39,7 +39,7 @@ exports.getRoutes = function (req, resp) {
 exports.getRouteStatus = function (req, resp) {
   console.log('getRouteStatus: ', req.params);
   const { routeId } = req.params;
-  Route.findOne({ _id: routeId }).then(route => {
+  Route.findOne({ id: routeId }).then(route => {
     RouteService.getRouteStatus(route)
         .then(routeStatus => resp.send({ action: 'success', data: routeStatus }))
         .catch(e => handleError(resp, e));
@@ -54,6 +54,17 @@ exports.postRoute = function (req, resp) {
       resp.send({action: 'success', data: newRoute});
   }).catch(err => {
     console.log('Err @postRoute: ', err);
+    return handleError(resp, err);
+  })
+}
+
+exports.putRoute = function (req, resp) {
+  var route = req.body;
+  // console.log('upsertRoute:');
+  Route.updateOne({ id: route.id }, route).then(newRoute => {
+    resp.send({action: 'success', data: newRoute});
+  }).catch(err => {
+    console.log('Err @putRoute: ', err);
     return handleError(resp, err);
   })
 }
