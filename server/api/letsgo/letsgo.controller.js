@@ -8,7 +8,7 @@ const { nanoid } = nanoidService;
 
 exports.getRouteTags = function (req, resp) {
   // console.log('getRouteTags: ');
-  RouteTags.find({ status: true }, {id: 1, tagName: 1, _id: 0, __v: 0}).sort({tagName: 1}).then(tags => {
+  RouteTags.find({ status: true }, {id: 1, tagName: 1, _id: 0}).sort({tagName: 1}).then(tags => {
     // if (!tags.length) {
     //   const rTags = ['Century => RGGC', 'Century => Kalanagar', "Century => Bharatnagar", "Century => WeW", "WeW => Kalanagar", "WeW => Century", "Kalanagar => Century"].map(t => new RouteTags({ id: nanoid(5), tagName: t}));
     //   RouteTags.insertMany(rTags).then(function(result) {
@@ -31,7 +31,7 @@ exports.postRouteTag = function (req, resp) {
 exports.getRoutes = function (req, resp) {
   // console.log('getRoutes: ', req.params);
   const findQuery = { status: true, ...(req.params || {}) };
-  Route.find(findQuery, {apiUrl: 0, _id: 0, __v: 0}).then(function(routes){
+  Route.find(findQuery, {apiUrl: 0, _id: 0}).then(function(routes){
     resp.send({ action: 'success', data: routes });
   }).catch(err => handleError(resp, err));
 }
