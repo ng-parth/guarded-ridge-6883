@@ -3,6 +3,7 @@
  */
 
 var Api = require('./api.model');
+const moment = require("moment");
 
 exports.trackApi = function(req, res) {
   var api = req.query;
@@ -28,7 +29,7 @@ exports.getApis = function(req, res){
 exports.postError = function(req, res) {
   const errObj = req.body;
   // console.log('errObj', errObj);
-  errObj.createdTs = new Date().getTime();
+  errObj.createdTs = moment().format();
   errObj.apiInfo = JSON.parse(errObj.apiInfo);
   Api.create(errObj).then(errRecord => {
     res.sendStatus(200);

@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var ApiSchema = new Schema({
-  createdTs: Number,
+  createdTs: String,
   name: String,
   api: String,
   src: String,
