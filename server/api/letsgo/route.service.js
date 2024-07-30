@@ -17,6 +17,7 @@ RouteService.getRouteStatus = route => {
     //         }
     //     }
     // })
+    if (!route.apiUrl) return Promise.reject({errMsg: 'Route api url missing.'})
     return axios.get(route.apiUrl, {params: {stopIds: route.defaultStopId}}).then(response => {
         // console.log('axios success: ', response.data );
         // sample response from chalo console : at 6:26pm 9 April 2024
