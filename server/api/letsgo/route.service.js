@@ -1,5 +1,20 @@
 var axios = require('axios');
 const RouteService = {};
+const headers = {
+    // Accept: 'application/json',
+    // source: 1,
+    // cookie: '_ga=GA1.1.1243591062.1738336588; _gcl_au=1.1.1701692373.1747156167; _ga_5PRF9T2GLN=GS2.1.s1747156167$o1$g1$t1747156192$j0$l0$h0; mp_b1925cf6c0b3db7d5f3904a66abf8ec7_mixpanel=%7B%22distinct_id%22%3A%20%2284c71261562521409849e0fcf939c8e0%22%2C%22%24device_id%22%3A%20%22194bcef4e33c4b-0ff8d62cf79f6e-1d525636-1ea000-194bcef4e34e21%22%2C%22%24initial_referrer%22%3A%20%22%24direct%22%2C%22%24initial_referring_domain%22%3A%20%22%24direct%22%2C%22%24user_id%22%3A%20%2284c71261562521409849e0fcf939c8e0%22%2C%22clientSource%22%3A%20%22PWA%22%2C%22appVersionCode%22%3A%20%221001%22%2C%22selected%20language%22%3A%20%22English%22%2C%22timeZone%22%3A%20%22%2B05%3A30%22%2C%22deviceId%22%3A%20%2284c71261562521409849e0fcf939c8e0%22%2C%22mailId%22%3A%20%22ppmistry204%40gmail.com%22%2C%22phone%22%3A%20%228866255483%22%2C%22dob%22%3A%20658540800000%2C%22gender%22%3A%20%22MALE%22%2C%22firstName%22%3A%20%22Parth%22%2C%22lastName%22%3A%20%22Mistry%22%2C%22mobileNumber%22%3A%20%228866255483%22%2C%22userId%22%3A%20%228866255483%22%2C%22selectedCity%22%3A%20%22mumbai%22%7D; _ga_SEWPQ4G3XZ=GS2.1.s1747490754$o7$g1$t1747490797$j0$l0$h0',
+    // 'Cache-Control': 'no-cache',
+    // host:'chalo.com',
+    'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0.1; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36',
+    // 'x-type': 'pass',
+    // 'sec-ch-ua': '"Chromium";v="136", "Google Chrome";v="136", "Not.A/Brand";v="99"',
+    // 'Sec-Fetch-Dest': 'empty',
+    // 'sec-ch-ua-mobile': '?1',
+    // 'Sec-Fetch-Mode': 'cors',
+    // 'Sec-Fetch-Site': 'same-origin',
+    // 'sec-ch-ua-platform': '"Android"',
+}
 
 RouteService.getRouteStatus = route => {
     // console.log('Route Service: ', route?.apiUrl);
@@ -18,7 +33,8 @@ RouteService.getRouteStatus = route => {
     //     }
     // })
     if (!route.apiUrl) return Promise.reject({errMsg: 'Route api url missing.'});
-    return axios.get(route.apiUrl, {params: {stopIds: route.defaultStopId}}).then(response => {
+    // console.log('Checking status: ', route.apiUrl);
+    return axios.get(route.apiUrl, {params: {stopIds: route.defaultStopId}, headers}).then(response => {
         // console.log('axios success: ', response.data );
         // sample response from chalo console : at 6:26pm 9 April 2024
         // {
@@ -68,12 +84,13 @@ RouteService.searchResults = searchText => {
     const routeSearchUrl = process.env.LETSGO_ROUTE_SEARCH_URL;
     if (!routeSearchUrl) return Promise.reject({errMsg: 'Route search URL missing.'});
     const searchParams = {
+        headers,
         params: {
             day: '30-07-2024',
             station_type: 'transit',
             location: encodeURI(JSON.stringify({"lon":72.8777,"lat":19.076})),
             str: searchText
-        }
+        },
     }
     return axios.get(routeSearchUrl, searchParams).then(resp => {
         // console.log('Search Respo for : ', searchText, resp.data);
