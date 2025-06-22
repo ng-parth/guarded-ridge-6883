@@ -52,7 +52,7 @@ var port = process.env.PORT || 8090;
 
 mongoose.connect(mongoUrl).catch(err => {
     console.log('Err connecting mongoose: Connecting to fallback.', /*err && err.message || */ '');
-    mongoose.connect('mongodb://localhost/guarded-ridge-dev');
+    // mongoose.connect('mongodb://localhost/guarded-ridge-dev');
 });
 
 var server = app.listen(port , function () {
