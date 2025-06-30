@@ -101,7 +101,8 @@ RouteService.searchResults = searchText => {
             lastStopName: r.last_stop_name,
         }));
     })
-
+    //1-July-2025
+    // GET https://chalo.com/app/api/scheduler_v4/v5/mumbai/search?day=01-07-2025&station_type=transit&location=%7B%22lon%22:72.8777,%22lat%22:19.076%7D&str=A-62
     // GET https://chalo.com/app/api/scheduler_v4/v4/mumbai/search?day=30-07-2024&station_type=transit&location=%7B%22lon%22:72.8777,%22lat%22:19.076%7D&str=62
 //     day: 30-07-2024
 //     station_type: transit
@@ -139,6 +140,7 @@ RouteService.routeStopInfo = routeId => {
     const routeStopInfoUrl = process.env.LETSGO_ROUTE_STOP_INFO_URL;
     if (!routeStopInfoUrl) return Promise.reject({errMsg: 'Route search URL missing.'});
     const searchParams = {
+        headers,
         params: {
             route_id: routeId,
             day: 'tuesday',
